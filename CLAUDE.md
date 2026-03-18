@@ -11,7 +11,7 @@ Peirce abductive reasoning engine — inference to the best explanation for brai
 ## Gem Info
 
 - **Gem name**: `lex-abductive-reasoning`
-- **Version**: `0.1.0`
+- **Version**: `0.1.1`
 - **Module**: `Legion::Extensions::AbductiveReasoning`
 - **Ruby**: `>= 3.4`
 - **License**: MIT
@@ -78,7 +78,7 @@ Core engine managing `@observations` and `@hypotheses` hashes. Prunes oldest can
 Value object. `overall_score` = weighted sum of simplicity, explanatory_power, and prior_probability. `add_evidence` adjusts plausibility and auto-transitions state. `SUPPORT_EVIDENCE_THRESHOLD = 3`.
 
 ### `Helpers::Observation`
-Value object. Stores content, domain, surprise_level, context, and created_at.
+Value object. Stores content, domain, surprise_level, context, and created_at. Validates `surprise_level` against `SURPRISE_LEVELS` on construction — raises `ArgumentError` for invalid values.
 
 ## Integration Points
 
@@ -90,3 +90,4 @@ No actors defined — this extension is driven by explicit calls. Integrates int
 - `overall_score` uses `simplicity * 0.3 + explanatory_power * 0.4 + prior_probability * 0.3` — these weights are not runtime-configurable
 - Pruning on capacity is oldest-first for candidates; refuted hypotheses are pruned by `update_abductive_reasoning`
 - No actor defined: callers must invoke `update_abductive_reasoning` periodically for decay/pruning to occur
+- `SURPRISE_LEVELS` is validated at two layers: runner rejects early with `{ success: false }`, `Observation#initialize` raises `ArgumentError` as defense in depth

@@ -10,6 +10,10 @@ module Legion
           attr_reader :id, :content, :domain, :surprise_level, :context, :created_at
 
           def initialize(content:, domain:, surprise_level: :notable, context: {})
+            unless Constants::SURPRISE_LEVELS.include?(surprise_level)
+              raise ArgumentError, "invalid surprise_level: #{surprise_level.inspect}, must be one of #{Constants::SURPRISE_LEVELS}"
+            end
+
             @id             = SecureRandom.uuid
             @content        = content
             @domain         = domain
